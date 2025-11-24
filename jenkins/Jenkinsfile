@@ -2,30 +2,21 @@ pipeline {
     agent any
 
     tools {
-        // This must match the name you gave in Jenkins → Global Tool Configuration → Maven
-        maven 'mvn'
+        jdk 'JDK21'
+        maven 'M3'
     }
 
     stages {
-
         stage('Build') {
             steps {
-                // DO NOT use \bin\mvn
                 bat "mvn -B -DskipTests clean package"
             }
         }
-
         stage('Test') {
             steps {
                 bat "mvn test"
             }
-            post {
-                always {
-                    junit 'target/surefire-reports/*.xml'
-                }
-            }
         }
-
         stage('Deliver') {
             steps {
                 bat "jenkins\\scripts\\deliver.bat"
