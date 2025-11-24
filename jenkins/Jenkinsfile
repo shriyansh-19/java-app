@@ -1,14 +1,17 @@
 pipeline {
     agent any
-    options {
-        skipStagesAfterUnstable()
+
+    tools {
+        // This must match the name you gave in Jenkins → Global Tool Configuration → Maven
+        maven 'M3'
     }
 
     stages {
 
         stage('Build') {
             steps {
-                bat "%MAVEN_HOME%\\bin\\mvn -B -DskipTests clean package"
+                // DO NOT use \bin\mvn
+                bat "mvn -B -DskipTests clean package"
             }
         }
 
@@ -23,13 +26,10 @@ pipeline {
             }
         }
 
-        stage('Deliver') { 
+        stage('Deliver') {
             steps {
                 bat "jenkins\\scripts\\deliver.bat"
             }
         }
     }
 }
-
-
-
